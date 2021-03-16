@@ -1,0 +1,856 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Home Assistant REST API",
+    "version" : "1.0",
+    "title" : "Home Assistant"
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/bramboe/homeassistant/1.0",
+  "schemes" : [ "https", "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "tags" : [ "Core" ],
+        "summary" : "API alive message",
+        "description" : "Returns message if API is up and running.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "API is up and running",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/config" : {
+      "get" : {
+        "tags" : [ "Core" ],
+        "summary" : "API alive message",
+        "description" : "Returns the current configuration as JSON.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Current configuration",
+            "schema" : {
+              "$ref" : "#/definitions/ApiConfig"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/discovery_info" : {
+      "get" : {
+        "tags" : [ "Core" ],
+        "summary" : "Basic information about Home Assistant instance",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Basic information",
+            "schema" : {
+              "$ref" : "#/definitions/DiscoveryInfo"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/bootstrap" : {
+      "get" : {
+        "tags" : [ "Core" ],
+        "summary" : "Returns all data needed to bootstrap Home Assistant.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Bootstrap information",
+            "schema" : {
+              "$ref" : "#/definitions/BootstrapInfo"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/events" : {
+      "get" : {
+        "tags" : [ "Events" ],
+        "summary" : "Array of event objects.",
+        "description" : "Returns an array of event objects. Each event object contain event name and listener count.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Events",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Event"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/services" : {
+      "get" : {
+        "tags" : [ "Services" ],
+        "summary" : "Array of service objects.",
+        "description" : "Returns an array of service objects. Each object contains the domain and which services it contains.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Services",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Service"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/history" : {
+      "get" : {
+        "tags" : [ "State" ],
+        "summary" : "Array of state changes in the past.",
+        "description" : "Returns an array of state changes in the past. Each object contains further detail for the entities.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "State changes",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/History"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/states" : {
+      "get" : {
+        "tags" : [ "State" ],
+        "summary" : "Array of state objects.",
+        "description" : "Returns an array of state objects. Each state has the following attributes: entity_id, state, last_changed and attributes.\n",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "States",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/State"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/states/{entity_id}" : {
+      "get" : {
+        "tags" : [ "State" ],
+        "summary" : "Specific state object.",
+        "description" : "Returns a state object for specified entity_id.\n",
+        "parameters" : [ {
+          "name" : "entity_id",
+          "in" : "path",
+          "description" : "entity_id of the entity to query",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "State",
+            "schema" : {
+              "$ref" : "#/definitions/State"
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "State" ],
+        "description" : "Updates or creates the current state of an entity.\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "entity_id",
+          "in" : "path",
+          "description" : "entity_id to set the state of",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "State parameter",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/body"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "State of existing entity was set",
+            "schema" : {
+              "$ref" : "#/definitions/State"
+            }
+          },
+          "201" : {
+            "description" : "State of new entity was set",
+            "headers" : {
+              "location" : {
+                "type" : "string",
+                "description" : "location of the new entity"
+              }
+            },
+            "schema" : {
+              "$ref" : "#/definitions/State"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/error_log" : {
+      "get" : {
+        "tags" : [ "Core" ],
+        "summary" : "Error log",
+        "description" : "Retrieve all errors logged during the current session of Home Assistant as a plaintext response.\n",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Plain text error log"
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/camera_proxy/camera.{entity_id}" : {
+      "get" : {
+        "tags" : [ "Camera" ],
+        "summary" : "Camera image.",
+        "description" : "Returns the data (image) from the specified camera entity_id.\n",
+        "produces" : [ "image/jpeg" ],
+        "parameters" : [ {
+          "name" : "entity_id",
+          "in" : "path",
+          "description" : "entity_id of the camera to query",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Camera image",
+            "schema" : {
+              "type" : "file"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/events/{event_type}" : {
+      "post" : {
+        "tags" : [ "Events" ],
+        "description" : "Fires an event with event_type\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "event_type",
+          "in" : "path",
+          "description" : "event_type to fire event with",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "event_data",
+          "required" : false,
+          "schema" : {
+            "type" : "object"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response message",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/services/{domain}/{service}" : {
+      "post" : {
+        "tags" : [ "Services" ],
+        "description" : "Calls a service within a specific domain. Will return when the service has been executed or 10 seconds has past, whichever comes first.\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "domain",
+          "in" : "path",
+          "description" : "domain of the service",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "service",
+          "in" : "path",
+          "description" : "service to call",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "service_data",
+          "required" : false,
+          "schema" : {
+            "type" : "object"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of states that have changed while the service was being executed. The result will include any changed states that changed while the service was being executed, even if their change was the result of something else happening in the system.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/State"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/template" : {
+      "post" : {
+        "tags" : [ "Template" ],
+        "description" : "Render a Home Assistant template.\n",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Template to render",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_1"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the rendered template in plain text.",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/event_forwarding" : {
+      "post" : {
+        "tags" : [ "Core" ],
+        "description" : "Setup event forwarding to another Home Assistant instance.\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Event Forwarding parameter",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_2"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "It will return a message if event forwarding was setup successful.",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Core" ],
+        "description" : "Cancel event forwarding to another Home Assistant instance.\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Event Forwarding parameter",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_2"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "It will return a message if event forwarding was cancelled successful.",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          },
+          "default" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/stream" : {
+      "get" : {
+        "tags" : [ "Core", "Events" ],
+        "summary" : "Server-sent events",
+        "description" : "The server-sent events feature is a one-way channel from your Home Assistant server to a client which is acting as a consumer.",
+        "produces" : [ "text/event-stream" ],
+        "parameters" : [ {
+          "name" : "restrict",
+          "in" : "query",
+          "description" : "comma-separated list of event_types to filter",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "Stream of events",
+            "schema" : {
+              "type" : "object",
+              "x-events" : {
+                "state_changed" : {
+                  "type" : "object",
+                  "properties" : {
+                    "entity_id" : {
+                      "type" : "string"
+                    },
+                    "old_state" : {
+                      "$ref" : "#/definitions/State"
+                    },
+                    "new_state" : {
+                      "$ref" : "#/definitions/State"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "api_key" : {
+      "description" : "API password",
+      "type" : "apiKey",
+      "name" : "x-ha-access",
+      "in" : "header"
+    }
+  },
+  "definitions" : {
+    "ApiConfig" : {
+      "type" : "object",
+      "properties" : {
+        "components" : {
+          "type" : "array",
+          "description" : "List of component types",
+          "items" : {
+            "type" : "string",
+            "description" : "Component type"
+          }
+        },
+        "latitude" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "Latitude of Home Assistant server"
+        },
+        "longitude" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "Longitude of Home Assistant server"
+        },
+        "location_name" : {
+          "type" : "string"
+        },
+        "unit_system" : {
+          "$ref" : "#/definitions/ApiConfig_unit_system"
+        },
+        "time_zone" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DiscoveryInfo" : {
+      "type" : "object",
+      "properties" : {
+        "base_url" : {
+          "type" : "string"
+        },
+        "location_name" : {
+          "type" : "string"
+        },
+        "requires_api_password" : {
+          "type" : "boolean"
+        },
+        "version" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BootstrapInfo" : {
+      "type" : "object",
+      "properties" : {
+        "config" : {
+          "$ref" : "#/definitions/ApiConfig"
+        },
+        "events" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Event"
+          }
+        },
+        "services" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Service"
+          }
+        },
+        "states" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/State"
+          }
+        }
+      }
+    },
+    "Event" : {
+      "type" : "object",
+      "properties" : {
+        "event" : {
+          "type" : "string"
+        },
+        "listener_count" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "Service" : {
+      "type" : "object",
+      "properties" : {
+        "domain" : {
+          "type" : "string"
+        },
+        "services" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/DomainService"
+          }
+        }
+      }
+    },
+    "DomainService" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "fields" : {
+          "type" : "object",
+          "description" : "Object with service fields that can be called",
+          "properties" : { }
+        }
+      }
+    },
+    "State" : {
+      "type" : "object",
+      "properties" : {
+        "attributes" : {
+          "$ref" : "#/definitions/StateAttributes"
+        },
+        "state" : {
+          "type" : "string"
+        },
+        "entity_id" : {
+          "type" : "string"
+        },
+        "last_changed" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "StateAttributes" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "string"
+      }
+    },
+    "History" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/State"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "last_updated" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      } ]
+    },
+    "Message" : {
+      "type" : "object",
+      "properties" : {
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body" : {
+      "type" : "object",
+      "required" : [ "state" ],
+      "properties" : {
+        "attributes" : {
+          "$ref" : "#/definitions/StateAttributes"
+        },
+        "state" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body_1" : {
+      "type" : "object",
+      "required" : [ "template" ],
+      "properties" : {
+        "template" : {
+          "type" : "string",
+          "description" : "Jinja2 template string"
+        }
+      }
+    },
+    "body_2" : {
+      "type" : "object",
+      "required" : [ "api_password", "host" ],
+      "properties" : {
+        "host" : {
+          "type" : "string"
+        },
+        "api_password" : {
+          "type" : "string"
+        },
+        "port" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "ApiConfig_unit_system" : {
+      "type" : "object",
+      "properties" : {
+        "length" : {
+          "type" : "string"
+        },
+        "mass" : {
+          "type" : "string"
+        },
+        "temperature" : {
+          "type" : "string"
+        },
+        "volume" : {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "parameters" : {
+    "State" : {
+      "in" : "body",
+      "name" : "body",
+      "description" : "State parameter",
+      "required" : false,
+      "schema" : {
+        "$ref" : "#/definitions/body"
+      }
+    },
+    "EventData" : {
+      "in" : "body",
+      "name" : "body",
+      "description" : "event_data",
+      "required" : false,
+      "schema" : {
+        "type" : "object"
+      }
+    },
+    "ServiceData" : {
+      "in" : "body",
+      "name" : "body",
+      "description" : "service_data",
+      "required" : false,
+      "schema" : {
+        "type" : "object"
+      }
+    },
+    "Template" : {
+      "in" : "body",
+      "name" : "body",
+      "description" : "Template to render",
+      "required" : true,
+      "schema" : {
+        "$ref" : "#/definitions/body_1"
+      }
+    },
+    "EventForwarding" : {
+      "in" : "body",
+      "name" : "body",
+      "description" : "Event Forwarding parameter",
+      "required" : true,
+      "schema" : {
+        "$ref" : "#/definitions/body_2"
+      }
+    }
+  }
+}
